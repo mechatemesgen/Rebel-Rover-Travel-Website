@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import unsplash from '../../assets/unsplash3.png';
-import vector3 from '../../assets/vector3.png';
+import vector3 from '../../assets/Vector3.png';
 import people from '../../assets/people.png';
 import price from '../../assets/price.png';
-import vector from '../../assets/vector.png';
+import vector from '../../assets/Vector.png';
 import bigui from '../../assets/bigui.png';
 import booking from '../../assets/booking.com.png';
 import jakmaen from '../../assets/jakmaen.png';
