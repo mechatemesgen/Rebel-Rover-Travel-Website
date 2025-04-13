@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import unsplash from '../../assets/unsplash3.png';
-import vector3 from '../../assets/Vector3.png';
+import Vector3 from '../../assets/Vector3.png';
 import people from '../../assets/people.png';
 import price from '../../assets/price.png';
-import vector from '../../assets/Vector.png';
+import Vector from '../../assets/Vector.png';
 import bigui from '../../assets/bigui.png';
-import booking from '../../assets/booking.com.png';
-import jakmaen from '../../assets/jakmaen.png';
-import katana from '../../assets/katana.png';
+import booking from '../../assets/Booking.com.png';
+import jakmaen from '../../assets/Jakmaen.png';
+import katana from '../../assets/Katana.png';
 import travava from '../../assets/travava.png';
 const Services = () => {
   const services = [
@@ -22,7 +22,7 @@ const Services = () => {
       description: 'Our service is reliable and convenient, our service is quality.',
     },
     {
-      icon: <img src={vector} alt="Handpicked Hotels" className="rounded-md w-20 h-20 bg-black p-3" />,
+      icon: <img src={Vector} alt="Handpicked Hotels" className="rounded-md w-20 h-20 bg-black p-3" />,
       title: 'Handpicked Hotels',
       description: 'Our service is reliable and convenient, our service is quality.',
     }
@@ -108,7 +108,7 @@ const Services = () => {
           <p className="text-gray-600  mb-10 text-sm md:text-base">{service.description}</p>
           
           <a href="#" className="   mb-4 md:ml-3 flex items-center text-black font-medium">
-            Learn more <img className='ml-2' src={vector3} alt='arrow'/> 
+            Learn more <img className='ml-2' src={Vector3} alt='arrow'/> 
           </a>
         </div>
       </div>
