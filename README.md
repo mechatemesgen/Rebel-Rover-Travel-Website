@@ -31,7 +31,7 @@ We proudly acknowledge the amazing work of our contributors:
 
 | 👩‍💻 GitHub Username | Role |
 |----------------------|------|
-| [@mecmesgen](https://github.com/mechatemesgen) | Developer |
+| [@mechatemesgen](https://github.com/mechatemesgen) | Developer |
 | [@helenlemessa](https://github.com/helenlemessa) | Developer |
 | [@Abdurazakm](https://github.com/Abdurazakm) | Developer |
 | [@SuadAbrar](https://github.com/SuadAbrar) | Developer |
