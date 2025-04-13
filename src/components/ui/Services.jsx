@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import unsplash from '../../assets/unsplash3.png';
-import vector3 from '../../assets/vector 3.png';
+import vector3 from '../../assets/vector3.png';
 import people from '../../assets/people.png';
 import price from '../../assets/price.png';
 import vector from '../../assets/vector.png';
