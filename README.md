@@ -20,6 +20,26 @@ This project transforms the **Rebel Rover** Figma design into a fully functional
 
 ---
 
+## 🌐 Live Demo
+
+[🔗 View The Website](https://rebel-rover-travel-capstone.vercel.app/)
+
+---
+## 🤝 Contributors
+
+We proudly acknowledge the amazing work of our contributors:
+
+| 👩‍💻 GitHub Username | Role |
+|----------------------|------|
+| [@mecmesgen](https://github.com/mechatemesgen) | Developer |
+| [@helenlemessa](https://github.com/helenlemessa) | Developer |
+| [@Abdurazakm](https://github.com/Abdurazakm) | Developer |
+| [@SuadAbrar](https://github.com/SuadAbrar) | Developer |
+| [@MuniraAbdulkerim](https://github.com/MuniraAbdulkerim) | Developer |
+| [@Heluhz](https://github.com/Heluhz) | Developer |
+
+🔍 [See Full Contribution Graph on GitHub](https://github.com/helenlemessa/Rebel-Rover-Travel-Website/pulse)
+
 ## Tech Stack
 
 - **React**
