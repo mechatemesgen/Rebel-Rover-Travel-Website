@@ -37,6 +37,7 @@ We proudly acknowledge the amazing work of our contributors:
 | [@SuadAbrar](https://github.com/SuadAbrar) | Developer |
 | [@MuniraAbdulkerim](https://github.com/MuniraAbdulkerim) | Developer |
 | [@Heluhz](https://github.com/Heluhz) | Developer |
+| [@bekam-bit](https://github.com/bekam-bit) | Developer |
 
 🔍 [See Full Contribution Graph on GitHub](https://github.com/helenlemessa/Rebel-Rover-Travel-Website/pulse)
 
