@@ -1,13 +1,29 @@
+import React, { useState } from 'react';
+import BookingStepper from "../BookingStepper/BookingStepper";
 import Pagination from "./Pagination";
 
 export default function Destinations({ data = [], page, perPage, onPageChange }) {
+  const [isBookingOpen, setBookingOpen] = useState(false);
+  const [selectedDestination, setSelectedDestination] = useState(null);
+
   const safeData = Array.isArray(data) ? data : [];
   const displayedItems = safeData.slice(page * perPage, (page + 1) * perPage);
   const totalPages = Math.ceil(safeData.length / perPage);
   const currentPage = page + 1;
 
+  const openBooking = (destination) => {
+    setSelectedDestination(destination);
+    setBookingOpen(true);
+  };
+
+  const closeBooking = () => {
+    setSelectedDestination(null);
+    setBookingOpen(false);
+  };
+
   return (
     <section className="py-10 px-4">
+      {/* Header Section */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10">
         <div>
           <h2 id="adventure" className="text-3xl font-bold mb-2">Popular Destination</h2>
@@ -21,6 +37,7 @@ export default function Destinations({ data = [], page, perPage, onPageChange })
         </button>
       </div>
 
+      {/* Destination Cards */}
       {displayedItems.length === 0 ? (
         <p className="text-gray-500 text-center w-full py-10">No destinations found.</p>
       ) : (
@@ -48,7 +65,10 @@ export default function Destinations({ data = [], page, perPage, onPageChange })
                   {item.description}
                 </p>
                 <div className="text-yellow-400 text-sm">★★★★★</div>
-                <button className="mt-auto bg-black text-white w-full py-2 rounded hover:bg-gray-800 transition-all duration-200 cursor-pointer">
+                <button
+                  onClick={() => openBooking(item)}
+                  className="mt-auto bg-black text-white w-full py-2 rounded hover:bg-gray-800 transition-all duration-200 cursor-pointer"
+                >
                   Book now
                 </button>
               </div>
@@ -57,6 +77,7 @@ export default function Destinations({ data = [], page, perPage, onPageChange })
         </div>
       )}
 
+      {/* Pagination */}
       <div className="mt-10">
         <Pagination
           currentPage={currentPage}
@@ -64,6 +85,13 @@ export default function Destinations({ data = [], page, perPage, onPageChange })
           onPageChange={(newPage) => onPageChange(newPage - 1)}
         />
       </div>
+
+      {/* Booking Modal */}
+      <BookingStepper
+        isOpen={isBookingOpen}
+        onClose={closeBooking}
+        destination={selectedDestination}
+      />
     </section>
   );
 }

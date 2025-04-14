@@ -101,8 +101,8 @@ const SearchOverlay = ({ isOpen, onClose }) => {
         )}
 
         {query && results.length === 0 && (
-          <div className="text-gray-400 text-sm text-center mt-4">
-            No destinations found.
+          <div className="p-5 bg-gray-900/80 rounded-2xl shadow-md border border-gray-700 text-gray-400 text-sm text-center mt-4">
+            <strong>No destinations found.</strong> 
           </div>
         )}
 
