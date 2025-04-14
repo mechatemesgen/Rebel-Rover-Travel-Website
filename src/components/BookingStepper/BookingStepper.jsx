@@ -4,6 +4,7 @@ import {
 } from 'react-icons/fa';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { QRCodeSVG } from 'qrcode.react';
 import Logo from '../../assets/PlaceholderImages/Logos/FooterLogo.png';
 
 function BookingStepper({ isOpen, onClose, destination }) {
@@ -95,26 +96,25 @@ function BookingStepper({ isOpen, onClose, destination }) {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Download function uses inline background and text colors to avoid using any unsupported CSS (like oklch)
+  // Download function using inline styles to avoid unsupported color functions
   const downloadTicket = async (format = 'pdf') => {
     const input = ticketRef.current;
     if (!input) {
       alert("Ticket not ready for download. Please wait a moment and try again.");
       return;
     }
-    
+
     setIsDownloading(true);
-    
+
     try {
-      // Allow a short delay for the element and its images to fully render
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      
+      // Allow extra time for elements and images to fully render
+      await new Promise((resolve) => setTimeout(resolve, 500));
       const canvas = await html2canvas(input, {
         useCORS: true,
         scale: 2,
         backgroundColor: "#ffffff"
       });
-      
+
       if (format === 'pdf') {
         const imgData = canvas.toDataURL('image/png');
         const pdf = new jsPDF('p', 'mm', 'a4');
@@ -159,56 +159,48 @@ function BookingStepper({ isOpen, onClose, destination }) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="relative">
               <FaUser className="absolute top-4 left-3 text-gray-400" />
-              <input
-                name="name"
-                value={formData.name}
+              <input 
+                name="name" 
+                value={formData.name} 
                 onChange={handleInputChange}
-                placeholder="Full Name"
-                className="pl-10 w-full border border-gray-300 rounded-lg p-3"
+                placeholder="Full Name" 
+                className="pl-10 w-full border border-gray-300 rounded-lg p-3" 
               />
-              {errors.name && (
-                <span className="text-red-500 text-sm">{errors.name}</span>
-              )}
+              {errors.name && <span className="text-red-500 text-sm">{errors.name}</span>}
             </div>
             <div className="relative">
               <FaEnvelope className="absolute top-4 left-3 text-gray-400" />
-              <input
-                name="email"
-                type="email"
-                value={formData.email}
+              <input 
+                name="email" 
+                type="email" 
+                value={formData.email} 
                 onChange={handleInputChange}
-                placeholder="Email Address"
-                className="pl-10 w-full border border-gray-300 rounded-lg p-3"
+                placeholder="Email Address" 
+                className="pl-10 w-full border border-gray-300 rounded-lg p-3" 
               />
-              {errors.email && (
-                <span className="text-red-500 text-sm">{errors.email}</span>
-              )}
+              {errors.email && <span className="text-red-500 text-sm">{errors.email}</span>}
             </div>
             <div className="relative">
               <FaCalendarAlt className="absolute top-4 left-3 text-gray-400" />
-              <input
-                name="checkIn"
-                type="date"
-                value={formData.checkIn}
+              <input 
+                name="checkIn" 
+                type="date" 
+                value={formData.checkIn} 
                 onChange={handleInputChange}
-                className="pl-10 w-full border border-gray-300 rounded-lg p-3"
+                className="pl-10 w-full border border-gray-300 rounded-lg p-3" 
               />
-              {errors.checkIn && (
-                <span className="text-red-500 text-sm">{errors.checkIn}</span>
-              )}
+              {errors.checkIn && <span className="text-red-500 text-sm">{errors.checkIn}</span>}
             </div>
             <div className="relative">
               <FaCalendarAlt className="absolute top-4 left-3 text-gray-400" />
-              <input
-                name="checkOut"
-                type="date"
-                value={formData.checkOut}
+              <input 
+                name="checkOut" 
+                type="date" 
+                value={formData.checkOut} 
                 onChange={handleInputChange}
-                className="pl-10 w-full border border-gray-300 rounded-lg p-3"
+                className="pl-10 w-full border border-gray-300 rounded-lg p-3" 
               />
-              {errors.checkOut && (
-                <span className="text-red-500 text-sm">{errors.checkOut}</span>
-              )}
+              {errors.checkOut && <span className="text-red-500 text-sm">{errors.checkOut}</span>}
             </div>
           </div>
         );
@@ -217,129 +209,168 @@ function BookingStepper({ isOpen, onClose, destination }) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="relative col-span-2">
               <FaCreditCard className="absolute top-4 left-3 text-gray-400" />
-              <input
-                name="cardNumber"
-                value={formData.cardNumber}
+              <input 
+                name="cardNumber" 
+                value={formData.cardNumber} 
                 onChange={handleInputChange}
-                placeholder="Card Number"
-                className="pl-10 w-full border border-gray-300 rounded-lg p-3"
+                placeholder="Card Number" 
+                className="pl-10 w-full border border-gray-300 rounded-lg p-3" 
               />
-              {errors.cardNumber && (
-                <span className="text-red-500 text-sm">{errors.cardNumber}</span>
-              )}
+              {errors.cardNumber && <span className="text-red-500 text-sm">{errors.cardNumber}</span>}
             </div>
             <div className="relative">
-              <input
-                name="expiry"
-                value={formData.expiry}
+              <input 
+                name="expiry" 
+                value={formData.expiry} 
                 onChange={handleInputChange}
-                placeholder="MM/YY"
-                className="w-full border border-gray-300 rounded-lg p-3"
+                placeholder="MM/YY" 
+                className="w-full border border-gray-300 rounded-lg p-3" 
               />
-              {errors.expiry && (
-                <span className="text-red-500 text-sm">{errors.expiry}</span>
-              )}
+              {errors.expiry && <span className="text-red-500 text-sm">{errors.expiry}</span>}
             </div>
             <div className="relative">
               <FaLock className="absolute top-4 left-3 text-gray-400" />
-              <input
-                name="cvc"
-                value={formData.cvc}
+              <input 
+                name="cvc" 
+                value={formData.cvc} 
                 onChange={handleInputChange}
-                placeholder="CVC"
-                className="pl-10 w-full border border-gray-300 rounded-lg p-3"
+                placeholder="CVC" 
+                className="pl-10 w-full border border-gray-300 rounded-lg p-3" 
               />
-              {errors.cvc && (
-                <span className="text-red-500 text-sm">{errors.cvc}</span>
-              )}
+              {errors.cvc && <span className="text-red-500 text-sm">{errors.cvc}</span>}
             </div>
           </div>
         );
       case 3:
         if (!ticketData) {
           return (
-            <div className="text-center p-6">
-              <h3 className="text-xl font-semibold mb-2">Loading ticket data...</h3>
-              <p className="text-gray-600">
-                Please wait while we generate your ticket.
-              </p>
+            <div style={{ textAlign: 'center', padding: '1.5rem' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '0.5rem' }}>Loading ticket data...</h3>
+              <p style={{ color: '#6b7280' }}>Please wait while we generate your ticket.</p>
             </div>
           );
         }
         return (
-          <div className="text-center p-6">
-            <h3 className="text-xl font-semibold mb-2">Booking Confirmed!</h3>
-            <p className="text-gray-600 mb-4">
+          <div style={{ textAlign: 'center', padding: '1.5rem' }}>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '0.5rem', color: '#10B981' }}>Booking Confirmed!</h3>
+            <p style={{ color: '#6b7280', marginBottom: '1rem' }}>
               Your booking for <strong>{destination.name}</strong> has been confirmed.
             </p>
             <div
               ref={ticketRef}
-              className="mt-4 border p-4 rounded-xl"
               style={{
-                backgroundColor: "#ffffff",
-                color: "#000000",
-                        }}
-                      >
-                        <h4 className="text-lg font-semibold mb-2">🎟 Booking Ticket</h4>
-                        <div className="w-full flex justify-center mb-2">
-                        <img
-                          src={Logo}
-                          alt="logo"
-                          className="object-contain"
-                          style={{ maxWidth: "80%", height: "auto" }}
-                        />
-                        </div>
-
-                        <p>
-                        <strong>Name:</strong> {ticketData.name}
-                        </p>
-                        <p>
-                        <strong>Booking ID:</strong> {ticketData.bookingId}
-                        </p>
-                        <p>
-                        <strong>Destination:</strong> {ticketData.destination}
-                        </p>
-                        <p>
-                        <strong>Check-in:</strong> {ticketData.checkIn}
-                        </p>
-                        <p>
-                        <strong>Check-out:</strong> {ticketData.checkOut}
-                        </p>
-                        <p>
-                        <strong>Total Price:</strong> ${ticketData.price}
-                        </p>
-                      </div>
-                      <div className="flex gap-4 mt-4 justify-center">
-                        <button
-                        onClick={() => downloadTicket('pdf')}
-                        disabled={isDownloading}
-                        className={`bg-green-600 text-white py-2 px-6 rounded-lg hover:bg-green-700 flex items-center gap-2 ${
-                          isDownloading ? 'opacity-50 cursor-not-allowed' : ''
-                        }`}
-                        >
-                        <FaDownload />
-                        {isDownloading ? 'Generating...' : 'Download as PDF'}
-                        </button>
-                        <button
-                        onClick={() => downloadTicket('image')}
-                        disabled={isDownloading}
-                        className={`bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 flex items-center gap-2 ${
-                          isDownloading ? 'opacity-50 cursor-not-allowed' : ''
-                        }`}
-                        >
-                        <FaDownload />
-                        {isDownloading ? 'Generating...' : 'Download as Image'}
-                        </button>
-                      </div>
-                      <button
-                        onClick={() => {
-                resetForm();
-                onClose();
+                fontFamily: 'Arial, sans-serif',
+                maxWidth: '640px',
+                margin: '0 auto',
+                borderRadius: '1rem',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                border: '1px solid #e5e7eb',
+                padding: '1.5rem',
+                backgroundColor: '#ffffff',
+                color: '#333333',
+                textAlign: 'left',
+                position: 'relative' // Added for positioning the QR code
               }}
-              className="block w-full bg-black text-white py-3 px-8 mt-4 rounded-lg hover:bg-gray-800 font-medium"
             >
-              Close
-            </button>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                <img
+                  src={Logo}
+                  alt="Logo"
+                  crossOrigin="anonymous"
+                  style={{ height: '50px', objectFit: 'contain' }}
+                />
+                <div style={{ textAlign: 'right' }}>
+                  <p style={{ fontSize: '0.875rem', color: '#9ca3af', margin: 0 }}>Booking Reference:</p>
+                  <h4 style={{ fontSize: '0.8rem', fontWeight: '700', color: '#3b82f6', margin: 0 }}>{ticketData.bookingId}</h4>
+                </div>
+              </div>
+              <hr style={{ border: 'none', borderBottom: '1px solid #e5e7eb', margin: '1rem 0' }} />
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', fontSize: '0.875rem', lineHeight: '1.5' }}>
+                <div>
+                  <p style={{ color: '#9ca3af', margin: 0 }}>Full Name</p>
+                  <p style={{ fontWeight: '500', margin: 0 }}>{ticketData.name}</p>
+                </div>
+                <div>
+                  <p style={{ color: '#9ca3af', margin: 0 }}>Email</p>
+                  <p style={{ fontWeight: '500', margin: 0 }}>{ticketData.email}</p>
+                </div>
+                <div>
+                  <p style={{ color: '#9ca3af', margin: 0 }}>Destination</p>
+                  <p style={{ fontWeight: '500', margin: 0 }}>{ticketData.destination}</p>
+                </div>
+                <div>
+                  <p style={{ color: '#9ca3af', margin: 0 }}>Total Price</p>
+                  <p style={{ fontWeight: '500', margin: 0 }}>${ticketData.price}</p>
+                </div>
+                <div>
+                  <p style={{ color: '#9ca3af', margin: 0 }}>Check-In</p>
+                  <p style={{ fontWeight: '500', margin: 0 }}>{ticketData.checkIn}</p>
+                </div>
+                <div>
+                  <p style={{ color: '#9ca3af', margin: 0 }}>Check-Out</p>
+                  <p style={{ fontWeight: '500', margin: 0 }}>{ticketData.checkOut}</p>
+                </div>
+              </div>
+              <hr style={{ border: 'none', borderBottom: '1px solid #e5e7eb', margin: '1rem 0' }} />
+              <p style={{ fontSize: '0.75rem', color: '#9ca3af', textAlign: 'center' }}>
+                Please present this ticket during check-in. Enjoy your trip!
+              </p>
+              {/* QR Code Section */}
+              <div style={{ 
+                position: 'absolute',
+                bottom: '5rem',
+                right: '2rem',
+                padding: '8px',
+                backgroundColor: 'white',
+                borderRadius: '8px',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+              }}>
+                <QRCodeSVG 
+                  value={ticketData.bookingId}
+                  size={96}
+                  level="H"
+                  includeMargin={false}
+                />
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '1.5rem' }}>
+              <button
+                onClick={() => downloadTicket('pdf')}
+                disabled={isDownloading}
+                style={{
+                  backgroundColor: '#10B981',
+                  color: '#ffffff',
+                  padding: '0.5rem 1.5rem',
+                  borderRadius: '0.5rem',
+                  border: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  cursor: isDownloading ? 'not-allowed' : 'pointer'
+                }}
+              >
+                <FaDownload />
+                {isDownloading ? 'Generating...' : 'Download PDF'}
+              </button>
+              <button
+                onClick={() => downloadTicket('image')}
+                disabled={isDownloading}
+                style={{
+                  backgroundColor: '#3b82f6',
+                  color: '#ffffff',
+                  padding: '0.5rem 1.5rem',
+                  borderRadius: '0.5rem',
+                  border: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  cursor: isDownloading ? 'not-allowed' : 'pointer'
+                }}
+              >
+                <FaDownload />
+                {isDownloading ? 'Generating...' : 'Download Image'}
+              </button>
+            </div>
           </div>
         );
       default:
@@ -348,32 +379,48 @@ function BookingStepper({ isOpen, onClose, destination }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center">
-      <div className="bg-white m-2 rounded-2xl shadow-xl w-full max-w-lg p-6 relative">
+    <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(5px)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ backgroundColor: '#ffffff', margin: '0.5rem', borderRadius: '1rem', boxShadow: '0 10px 25px rgba(0,0,0,0.1)', width: '100%', maxWidth: '32rem', padding: '1.5rem', position: 'relative' }}>
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-red-500 text-3xl"
+          style={{
+            position: 'absolute',
+            top: '1rem',
+            right: '1rem',
+            color: '#9ca3af',
+            background: 'none',
+            border: 'none',
+            fontSize: '2rem',
+            cursor: 'pointer'
+          }}
         >
-          ×
+          &times;
         </button>
-        <div className="flex justify-center mb-6">
-          <img src={Logo} alt="logo" className="h-12" />
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
+          <img src={Logo} alt="logo" style={{ height: '3rem' }} />
         </div>
         {currentStep < 3 && (
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-semibold mb-2">{destination.name}</h2>
-            <p className="text-gray-600 mb-4">${destination.price}/3 days</p>
+          <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: '600', marginBottom: '0.5rem' }}>{destination.name}</h2>
+            <p style={{ color: '#6b7280', marginBottom: '0.5rem' }}>${destination.price}/3 days</p>
           </div>
         )}
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {renderFormStep()}
           {currentStep < 3 && (
-            <div className="flex justify-between mt-6">
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1.5rem' }}>
               {currentStep > 1 && (
                 <button
                   type="button"
                   onClick={() => setCurrentStep((prev) => prev - 1)}
-                  className="bg-gray-200 text-gray-700 py-3 px-8 rounded-lg hover:bg-gray-300"
+                  style={{
+                    backgroundColor: '#e5e7eb',
+                    color: '#374151',
+                    padding: '0.75rem 2rem',
+                    borderRadius: '0.5rem',
+                    border: 'none',
+                    cursor: 'pointer'
+                  }}
                 >
                   Back
                 </button>
@@ -381,15 +428,18 @@ function BookingStepper({ isOpen, onClose, destination }) {
               <button
                 type="submit"
                 disabled={isLoading}
-                className={`ml-auto bg-black text-white py-3 px-8 rounded-lg ${
-                  isLoading ? 'opacity-75' : 'hover:bg-gray-800'
-                }`}
+                style={{
+                  backgroundColor: '#000000',
+                  color: '#ffffff',
+                  padding: '0.75rem 2rem',
+                  borderRadius: '0.5rem',
+                  border: 'none',
+                  cursor: 'pointer',
+                  marginLeft: 'auto',
+                  opacity: isLoading ? 0.75 : 1
+                }}
               >
-                {isLoading
-                  ? 'Processing...'
-                  : currentStep === 2
-                  ? 'Confirm Payment'
-                  : 'Continue'}
+                {isLoading ? 'Processing...' : (currentStep === 2 ? 'Confirm Payment' : 'Continue')}
               </button>
             </div>
           )}
