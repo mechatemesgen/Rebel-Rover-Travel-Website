@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import BookingStepper from "../BookingStepper/BookingStepper";
 
 const SearchOverlay = ({ isOpen, onClose }) => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [selectedDestination, setSelectedDestination] = useState(null);
+  const [isBookingOpen, setBookingOpen] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -42,6 +44,15 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     setSelectedDestination(item);
   };
 
+  const openBooking = () => {
+    setBookingOpen(true);
+  };
+
+  const closeBooking = () => {
+    setSelectedDestination(null);
+    setBookingOpen(false);
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -65,24 +76,6 @@ const SearchOverlay = ({ isOpen, onClose }) => {
             }}
             className="w-full py-4 pl-6 pr-14 text-lg bg-gray-800/80 border-2 border-gray-700 rounded-2xl outline-none focus:border-gray-500 placeholder-gray-400 text-white backdrop-blur-lg transition-all"
           />
-          <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
-            <kbd className="hidden sm:inline-flex items-center px-2 py-1 bg-gray-800/50 border border-gray-600 rounded-md text-gray-100 text-sm">
-              Esc
-            </kbd>
-            <svg
-              className="w-6 h-6 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2.5}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-          </div>
         </div>
 
         {results.length > 0 && (
@@ -120,8 +113,21 @@ const SearchOverlay = ({ isOpen, onClose }) => {
             <p className="mt-2 text-sm text-gray-400">
               <strong>Price:</strong> ${selectedDestination.price}
             </p>
+            <button
+              onClick={openBooking}
+              className="mt-4 bg-black text-white w-full py-2 rounded hover:bg-gray-800 transition-all duration-200 cursor-pointer"
+            >
+              Book now
+            </button>
           </div>
         )}
+
+        {/* Booking Stepper Modal */}
+        <BookingStepper
+          isOpen={isBookingOpen}
+          onClose={closeBooking}
+          destination={selectedDestination}
+        />
 
         <p className="text-center mt-4 text-gray-400 text-sm">
           Click <strong>Ctrl+K</strong> or <strong>⌘+K</strong>, and start typing to search. Press <strong>Esc</strong> to close.
