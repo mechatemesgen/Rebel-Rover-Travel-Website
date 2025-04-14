@@ -227,36 +227,36 @@ function BookingStepper({ isOpen, onClose, destination }) {
         );
       case 2:
         return (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" style={{ maxHeight: 'calc(100vh - 10rem)', overflowY: 'auto' }}>
-            <div className="relative col-span-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-4" style={{ maxHeight: 'calc(100vh - 10rem)', overflowY: 'auto' }}>
+            <div className="relative col-span-1 sm:col-span-2">
               <FaCreditCard className="absolute top-4 left-3 text-gray-400" />
               <input 
-                name="cardNumber" 
-                value={formData.cardNumber} 
-                onChange={handleInputChange}
-                placeholder="Card Number" 
-                className="pl-10 w-full border border-gray-300 rounded-lg p-3 text-sm sm:text-base" 
+          name="cardNumber" 
+          value={formData.cardNumber} 
+          onChange={handleInputChange}
+          placeholder="Card Number" 
+          className="pl-10 w-full border border-gray-300 rounded-lg p-3 text-sm sm:text-base" 
               />
               {errors.cardNumber && <span className="text-red-500 text-xs sm:text-sm">{errors.cardNumber}</span>}
             </div>
-            <div className="relative">
+            <div className="relative col-span-1">
               <input 
-                name="expiry" 
-                value={formData.expiry} 
-                onChange={handleInputChange}
-                placeholder="MM/YY" 
-                className="w-full border border-gray-300 rounded-lg p-3 text-sm sm:text-base" 
+          name="expiry" 
+          value={formData.expiry} 
+          onChange={handleInputChange}
+          placeholder="MM/YY" 
+          className="w-full border border-gray-300 rounded-lg p-3 text-sm sm:text-base" 
               />
               {errors.expiry && <span className="text-red-500 text-xs sm:text-sm">{errors.expiry}</span>}
             </div>
-            <div className="relative">
+            <div className="relative col-span-1">
               <FaLock className="absolute top-4 left-3 text-gray-400" />
               <input 
-                name="cvc" 
-                value={formData.cvc} 
-                onChange={handleInputChange}
-                placeholder="CVC" 
-                className="pl-10 w-full border border-gray-300 rounded-lg p-3 text-sm sm:text-base" 
+          name="cvc" 
+          value={formData.cvc} 
+          onChange={handleInputChange}
+          placeholder="CVC" 
+          className="pl-10 w-full border border-gray-300 rounded-lg p-3 text-sm sm:text-base" 
               />
               {errors.cvc && <span className="text-red-500 text-xs sm:text-sm">{errors.cvc}</span>}
             </div>
