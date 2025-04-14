@@ -4,6 +4,7 @@ import {
 } from 'react-icons/fa';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import Swal from 'sweetalert2';
 import { QRCodeSVG } from 'qrcode.react';
 import Logo from '../../assets/PlaceholderImages/Logos/FooterLogo.png';
 
@@ -24,7 +25,6 @@ function BookingStepper({ isOpen, onClose, destination }) {
   const [isDownloading, setIsDownloading] = useState(false);
   const ticketRef = useRef();
 
-  // Reset form when destination changes
   useEffect(() => {
     setCurrentStep(1);
     setFormData({
@@ -75,7 +75,7 @@ function BookingStepper({ isOpen, onClose, destination }) {
     } else if (currentStep === 2) {
       if (validateStep(2)) {
         setIsLoading(true);
-        await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulate async processing
+        await new Promise((resolve) => setTimeout(resolve, 1500)); 
         setIsLoading(false);
         setTicketData({
           name: formData.name,
@@ -86,7 +86,7 @@ function BookingStepper({ isOpen, onClose, destination }) {
           destination: destination.name,
           price: destination.price
         });
-        setCurrentStep(3); // Move to step 3 to display ticket
+        setCurrentStep(3); 
       }
     }
   };
@@ -96,18 +96,22 @@ function BookingStepper({ isOpen, onClose, destination }) {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Download function using inline styles to avoid unsupported color functions
   const downloadTicket = async (format = 'pdf') => {
     const input = ticketRef.current;
     if (!input) {
-      alert("Ticket not ready for download. Please wait a moment and try again.");
+      import('sweetalert2').then(Swal => {
+        Swal.default.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Ticket not ready for download. Please wait a moment and try again.',
+        });
+      });
       return;
     }
 
     setIsDownloading(true);
 
     try {
-      // Allow extra time for elements and images to fully render
       await new Promise((resolve) => setTimeout(resolve, 500));
       const canvas = await html2canvas(input, {
         useCORS: true,
@@ -116,13 +120,26 @@ function BookingStepper({ isOpen, onClose, destination }) {
       });
 
       if (format === 'pdf') {
+        const canvas = await html2canvas(input, {
+          useCORS: true,
+          backgroundColor: '#ffffff',
+        });
+      
         const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      
+        const canvasWidthPx = canvas.width;
+        const canvasHeightPx = canvas.height;
+      
+        const pxToMm = (px) => px / 3.7795;
+        const pdfWidth = pxToMm(canvasWidthPx);
+        const pdfHeight = pxToMm(canvasHeightPx);
+      
+        const pdf = new jsPDF('p', 'mm', [pdfWidth, pdfHeight]);
         pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
         pdf.save('booking_ticket.pdf');
-      } else if (format === 'image') {
+      }
+      
+      else if (format === 'image') {
         const imgData = canvas.toDataURL('image/png');
         const link = document.createElement('a');
         link.href = imgData;
@@ -131,7 +148,11 @@ function BookingStepper({ isOpen, onClose, destination }) {
       }
     } catch (error) {
       console.error("Error generating ticket:", error);
-      alert("Failed to generate ticket. Please try again.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to generate ticket. Please try again.',
+      });
     } finally {
       setIsDownloading(false);
     }
@@ -156,7 +177,7 @@ function BookingStepper({ isOpen, onClose, destination }) {
     switch (currentStep) {
       case 1:
         return (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" style={{ maxHeight: 'calc(100vh - 10rem)', overflowY: 'auto' }}>
             <div className="relative">
               <FaUser className="absolute top-4 left-3 text-gray-400" />
               <input 
@@ -164,9 +185,9 @@ function BookingStepper({ isOpen, onClose, destination }) {
                 value={formData.name} 
                 onChange={handleInputChange}
                 placeholder="Full Name" 
-                className="pl-10 w-full border border-gray-300 rounded-lg p-3" 
+                className="pl-10 w-full border border-gray-300 rounded-lg p-3 text-sm sm:text-base" 
               />
-              {errors.name && <span className="text-red-500 text-sm">{errors.name}</span>}
+              {errors.name && <span className="text-red-500 text-xs sm:text-sm">{errors.name}</span>}
             </div>
             <div className="relative">
               <FaEnvelope className="absolute top-4 left-3 text-gray-400" />
@@ -176,9 +197,9 @@ function BookingStepper({ isOpen, onClose, destination }) {
                 value={formData.email} 
                 onChange={handleInputChange}
                 placeholder="Email Address" 
-                className="pl-10 w-full border border-gray-300 rounded-lg p-3" 
+                className="pl-10 w-full border border-gray-300 rounded-lg p-3 text-sm sm:text-base" 
               />
-              {errors.email && <span className="text-red-500 text-sm">{errors.email}</span>}
+              {errors.email && <span className="text-red-500 text-xs sm:text-sm">{errors.email}</span>}
             </div>
             <div className="relative">
               <FaCalendarAlt className="absolute top-4 left-3 text-gray-400" />
@@ -187,9 +208,9 @@ function BookingStepper({ isOpen, onClose, destination }) {
                 type="date" 
                 value={formData.checkIn} 
                 onChange={handleInputChange}
-                className="pl-10 w-full border border-gray-300 rounded-lg p-3" 
+                className="pl-10 w-full border border-gray-300 rounded-lg p-3 text-sm sm:text-base" 
               />
-              {errors.checkIn && <span className="text-red-500 text-sm">{errors.checkIn}</span>}
+              {errors.checkIn && <span className="text-red-500 text-xs sm:text-sm">{errors.checkIn}</span>}
             </div>
             <div className="relative">
               <FaCalendarAlt className="absolute top-4 left-3 text-gray-400" />
@@ -198,15 +219,15 @@ function BookingStepper({ isOpen, onClose, destination }) {
                 type="date" 
                 value={formData.checkOut} 
                 onChange={handleInputChange}
-                className="pl-10 w-full border border-gray-300 rounded-lg p-3" 
+                className="pl-10 w-full border border-gray-300 rounded-lg p-3 text-sm sm:text-base" 
               />
-              {errors.checkOut && <span className="text-red-500 text-sm">{errors.checkOut}</span>}
+              {errors.checkOut && <span className="text-red-500 text-xs sm:text-sm">{errors.checkOut}</span>}
             </div>
           </div>
         );
       case 2:
         return (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" style={{ maxHeight: 'calc(100vh - 10rem)', overflowY: 'auto' }}>
             <div className="relative col-span-2">
               <FaCreditCard className="absolute top-4 left-3 text-gray-400" />
               <input 
@@ -214,9 +235,9 @@ function BookingStepper({ isOpen, onClose, destination }) {
                 value={formData.cardNumber} 
                 onChange={handleInputChange}
                 placeholder="Card Number" 
-                className="pl-10 w-full border border-gray-300 rounded-lg p-3" 
+                className="pl-10 w-full border border-gray-300 rounded-lg p-3 text-sm sm:text-base" 
               />
-              {errors.cardNumber && <span className="text-red-500 text-sm">{errors.cardNumber}</span>}
+              {errors.cardNumber && <span className="text-red-500 text-xs sm:text-sm">{errors.cardNumber}</span>}
             </div>
             <div className="relative">
               <input 
@@ -224,9 +245,9 @@ function BookingStepper({ isOpen, onClose, destination }) {
                 value={formData.expiry} 
                 onChange={handleInputChange}
                 placeholder="MM/YY" 
-                className="w-full border border-gray-300 rounded-lg p-3" 
+                className="w-full border border-gray-300 rounded-lg p-3 text-sm sm:text-base" 
               />
-              {errors.expiry && <span className="text-red-500 text-sm">{errors.expiry}</span>}
+              {errors.expiry && <span className="text-red-500 text-xs sm:text-sm">{errors.expiry}</span>}
             </div>
             <div className="relative">
               <FaLock className="absolute top-4 left-3 text-gray-400" />
@@ -235,23 +256,23 @@ function BookingStepper({ isOpen, onClose, destination }) {
                 value={formData.cvc} 
                 onChange={handleInputChange}
                 placeholder="CVC" 
-                className="pl-10 w-full border border-gray-300 rounded-lg p-3" 
+                className="pl-10 w-full border border-gray-300 rounded-lg p-3 text-sm sm:text-base" 
               />
-              {errors.cvc && <span className="text-red-500 text-sm">{errors.cvc}</span>}
+              {errors.cvc && <span className="text-red-500 text-xs sm:text-sm">{errors.cvc}</span>}
             </div>
           </div>
         );
       case 3:
         if (!ticketData) {
           return (
-            <div style={{ textAlign: 'center', padding: '1.5rem' }}>
+            <div style={{ textAlign: 'center', padding: '1.5rem', maxHeight: 'calc(100vh - 10rem)', overflowY: 'auto' }}>
               <h3 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '0.5rem' }}>Loading ticket data...</h3>
               <p style={{ color: '#6b7280' }}>Please wait while we generate your ticket.</p>
             </div>
           );
         }
         return (
-          <div style={{ textAlign: 'center', padding: '1.5rem' }}>
+          <div style={{ textAlign: 'center', padding: '1.5rem', maxHeight: 'calc(100vh - 10rem)', overflowY: 'auto' }}>
             <h3 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '0.5rem', color: '#10B981' }}>Booking Confirmed!</h3>
             <p style={{ color: '#6b7280', marginBottom: '1rem' }}>
               Your booking for <strong>{destination.name}</strong> has been confirmed.
@@ -260,7 +281,7 @@ function BookingStepper({ isOpen, onClose, destination }) {
               ref={ticketRef}
               style={{
                 fontFamily: 'Arial, sans-serif',
-                maxWidth: '640px',
+                maxWidth: '100%',
                 margin: '0 auto',
                 borderRadius: '1rem',
                 boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
@@ -269,23 +290,23 @@ function BookingStepper({ isOpen, onClose, destination }) {
                 backgroundColor: '#ffffff',
                 color: '#333333',
                 textAlign: 'left',
-                position: 'relative' // Added for positioning the QR code
+                position: 'relative'
               }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1rem' }}>
                 <img
                   src={Logo}
                   alt="Logo"
                   crossOrigin="anonymous"
-                  style={{ height: '50px', objectFit: 'contain' }}
+                  style={{ height: '50px', objectFit: 'contain', alignSelf: 'center' }}
                 />
-                <div style={{ textAlign: 'right' }}>
+                <div style={{ textAlign: 'center' }}>
                   <p style={{ fontSize: '0.875rem', color: '#9ca3af', margin: 0 }}>Booking Reference:</p>
                   <h4 style={{ fontSize: '0.8rem', fontWeight: '700', color: '#3b82f6', margin: 0 }}>{ticketData.bookingId}</h4>
                 </div>
               </div>
               <hr style={{ border: 'none', borderBottom: '1px solid #e5e7eb', margin: '1rem 0' }} />
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', fontSize: '0.875rem', lineHeight: '1.5' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1rem', fontSize: '0.875rem', lineHeight: '1.5' }}>
                 <div>
                   <p style={{ color: '#9ca3af', margin: 0 }}>Full Name</p>
                   <p style={{ fontWeight: '500', margin: 0 }}>{ticketData.name}</p>
@@ -315,15 +336,10 @@ function BookingStepper({ isOpen, onClose, destination }) {
               <p style={{ fontSize: '0.75rem', color: '#9ca3af', textAlign: 'center' }}>
                 Please present this ticket during check-in. Enjoy your trip!
               </p>
-              {/* QR Code Section */}
               <div style={{ 
-                position: 'absolute',
-                bottom: '5rem',
-                right: '2rem',
-                padding: '8px',
-                backgroundColor: 'white',
-                borderRadius: '8px',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                display: 'flex',
+                justifyContent: 'center',
+                marginTop: '1rem'
               }}>
                 <QRCodeSVG 
                   value={ticketData.bookingId}
@@ -333,7 +349,7 @@ function BookingStepper({ isOpen, onClose, destination }) {
                 />
               </div>
             </div>
-            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '1.5rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', justifyContent: 'center', marginTop: '1.5rem' }}>
               <button
                 onClick={() => downloadTicket('pdf')}
                 disabled={isDownloading}
@@ -346,7 +362,8 @@ function BookingStepper({ isOpen, onClose, destination }) {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '0.5rem',
-                  cursor: isDownloading ? 'not-allowed' : 'pointer'
+                  cursor: isDownloading ? 'not-allowed' : 'pointer',
+                  justifyContent: 'center'
                 }}
               >
                 <FaDownload />
@@ -364,7 +381,8 @@ function BookingStepper({ isOpen, onClose, destination }) {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '0.5rem',
-                  cursor: isDownloading ? 'not-allowed' : 'pointer'
+                  cursor: isDownloading ? 'not-allowed' : 'pointer',
+                  justifyContent: 'center'
                 }}
               >
                 <FaDownload />
